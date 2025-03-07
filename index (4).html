@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Study Sphere</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif; /* Modern font */
+        }
+
+        body {
+            min-height: 100vh;
+            min-width: 100vw;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                        url('/IMG_20250228_231926_963.jpg') center/cover no-repeat;
+            background-attachment: scroll;
+            position: relative;
+        }
+
+        /* Orientation-specific adjustments */
+        @media (orientation: portrait) {
+            body {
+                background-size: cover;
+                background-position: center center;
+            }
+        }
+
+        @media (orientation: landscape) {
+            body {
+                background-size: 100% auto;
+            }
+        }
+
+        header {
+            width: 100%;
+            padding: 20px 40px;
+            background-color: transparent;
+            position: absolute;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-title {
+            font-size: clamp(1.5rem, 5vw, 2rem); /* Larger font size */
+            color: #ffffff;
+            font-weight: 700; /* Bold font */
+            letter-spacing: 1.5px; /* Spacing for elegance */
+            text-transform: uppercase; /* Uppercase for impact */
+            font-family: 'Montserrat', sans-serif; /* Sleek font */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            color: white;
+            z-index: 1;
+            margin-top: 60px;
+        }
+
+        .main-title {
+            font-size: clamp(2.5rem, 10vw, 4rem); /* Larger and more impactful */
+            margin-bottom: 15px;
+            letter-spacing: 2px; /* Wider spacing */
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7); /* Stronger shadow */
+            padding: 0 20px;
+            font-weight: 700; /* Bold for emphasis */
+            font-family: 'Montserrat', sans-serif; /* Modern font */
+            text-transform: uppercase; /* Uppercase for a professional look */
+        }
+
+        .subtitle {
+            font-size: clamp(1.2rem, 4vw, 1.5rem); /* Slightly larger */
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+            padding: 0 20px;
+            font-weight: 400; /* Regular weight for contrast */
+            font-family: 'Poppins', sans-serif; /* Clean and modern */
+            line-height: 1.5; /* Better readability */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .nav-button {
+            padding: 15px 40px; /* Larger padding for better clickability */
+            background-color: rgba(45, 52, 54, 0.9);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px; /* Slightly rounded */
+            transition: all 0.3s ease;
+            font-weight: 600; /* Semi-bold */
+            border: 2px solid white;
+            font-size: clamp(1rem, 3.5vw, 1.2rem); /* Slightly larger */
+            text-transform: uppercase; /* Uppercase for consistency */
+            letter-spacing: 1px; /* Spacing for elegance */
+        }
+
+        .nav-button:hover {
+            background-color: rgba(67, 77, 82, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle hover effect */
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+
+            .nav-button {
+                padding: 12px 30px; /* Adjusted for smaller screens */
+            }
+        }
+    </style>
+    <!-- Add Google Fonts for modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="site-title">Study Sphere</div>
+    </header>
+
+    <main>
+        <h1 class="main-title">INTERIOR DESIGN</h1>
+        <p class="subtitle">Spaces: Designed & Built</p>
+        
+        <div class="button-container">
+            <!-- START Button redirects to /login.html -->
+            <a href="/login.html" class="nav-button">START</a>
+        </div>
+    </main>
+</body>
+</html>
