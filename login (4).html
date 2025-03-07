@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Register</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                  url('/DALL·E 2025-02-28 23.38.08 - A modern, stylish interior with a dark theme and soft ambient lighting. The background has a luxurious, sleek design featuring minimalist furniture, e.webp') center/cover no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .login-btn {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .register-btn {
+      background: #FFFFFF;
+      color: #000000;
+      margin-top: 15px;
+    }
+
+    .add-questions-btn {
+      background: #000000;
+    opacity: 0  ;
+};
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Login</h1>
+    <form id="login-form">
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required>
+      </div>
+
+      <button type="submit" class="btn login-btn" name="action" value="login">
+        Login to Homepage
+      </button>
+
+      <button type="button" class="btn register-btn" onclick="redirectToRegister()">
+        Register
+      </button>
+
+      <button type="submit" class="btn add-questions-btn" name="action" value="addQuestions">
+        Login to Add Questions
+      </button>
+    </form>
+  </div>
+
+  <script>
+    function redirectToRegister() {
+      window.location.href = 'Register.html';
+    }
+
+    document.getElementById("login-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      // Get form data
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const action = event.submitter.value;
+
+      // Authentication check
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const user = users.find(u => 
+          u.email === email && 
+          u.password === password && 
+          u.status === 'approved'
+      );
+
+      if (user) {
+          localStorage.setItem("loggedInUser", JSON.stringify(user));
+          
+          // Redirect based on clicked button
+          if (action === "login") {
+              window.location.href = 'homePage.html';
+          } else if (action === "addQuestions") {
+              window.location.href = 'hp.html';
+          }
+      } else {
+          alert("Invalid credentials or account not approved.");
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <style>
+    /* Your existing CSS styles */
+             * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  body {
+    min-height: 100vh;
+    min-width: 100vw;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+      url('/DALL·E 2025-02-28 23.38.08 - A modern, stylish interior with a dark theme and soft ambient lighting. The background has a luxurious, sleek design featuring minimalist furniture, e.webp') center/cover no-repeat;
+    background-attachment: scroll;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+  
+  .container {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+  }
+  
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.5rem);
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .input-group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .input-group label {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+  
+  .btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: rgba(45, 52, 54, 0.9);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .btn:hover {
+    background: rgba(67, 77, 82, 0.9);
+  }
+  
+  .register-btn {
+    background: rgba(34, 166, 179, 0.9);
+    margin-top: 15px;
+  }
+  
+  .register-btn:hover {
+    background: rgba(24, 144, 155, 0.9);
+  }
+    .decks-section {
+      margin-top: 30px;
+    }
+
+    .deck {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .deck-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .add-form {
+      margin-bottom: 15px;
+    }
+
+    .add-form input,
+    .add-form textarea {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .question-item,
+    .note-item {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+
+    .file-note {
+      color: #00bcd4;
+      cursor: pointer;
+    
+    .question-type-selector {
+      margin: 10px 0;
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    .question-options {
+      margin: 10px 0;
+      padding: 10px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 5px;
+    }
+
+    .option-input {
+      margin: 5px 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .correct-answer {
+      background: rgba(0,255,0,0.1);
+      border-left: 3px solid #00ff00;
+    }
+
+    .true-false-buttons {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .true-false-btn {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .true-btn {
+      background: rgba(0,255,0,0.2);
+    }
+
+    .false-btn {
+      background: rgba(255,0,0,0.2);
+    }
+
+    .selected-tf {
+      border: 2px solid white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome, <span id="profile-name"></span></h1>
+
+    <div class="decks-section">
+      <h2>Create New Deck</h2>
+      <div class="add-form">
+        <input type="text" id="new-deck-name" placeholder="Enter deck name">
+        <button onclick="createNewDeck()" class="btn">Create Deck</button>
+      </div>
+
+      <div id="decks-container"></div>
+    </div>
+
+    <button onclick="logout()" class="btn">Logout</button>
+  </div>
+
+  <script>
+    let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!loggedInUser) window.location.href = 'login.html';
+
+    if (!loggedInUser.decks) {
+      loggedInUser.decks = [];
+      updateUserData();
+    }
+
+    document.getElementById("profile-name").textContent = loggedInUser.name;
+    displayDecks();
+
+    function createNewDeck() {
+      const deckName = document.getElementById('new-deck-name').value.trim();
+      if (!deckName) return alert('Please enter a deck name');
+
+      loggedInUser.decks.push({
+        name: deckName,
+        questions: [],
+        notes: []
+      });
+      updateUserData();
+      displayDecks();
+      document.getElementById('new-deck-name').value = '';
+    }
+
+    function addQuestion(deckIndex) {
+      const questionContainer = document.getElementById(`question-container-${deckIndex}`);
+      const questionType = questionContainer.querySelector('.question-type-selector').value;
+      const questionText = questionContainer.querySelector('.question-input').value.trim();
+      
+      if (!questionText) return alert('Please enter a question');
+
+      let questionObj = {
+        type: questionType,
+        text: questionText,
+        answer: null
+      };
+
+      switch(questionType) {
+        case 'multiple':
+          const options = Array.from(questionContainer.querySelectorAll('.option-input input[type="text"]'))
+            .map(input => input.value.trim())
+            .filter(value => value);
+          
+          if (options.length < 2) return alert('Please provide at least 2 options');
+          
+          const correctOption = questionContainer.querySelector('.option-input input[type="radio"]:checked');
+          if (!correctOption) return alert('Please select the correct answer');
+          
+          questionObj.options = options;
+          questionObj.answer = correctOption.parentElement.querySelector('input[type="text"]').value;
+          break;
+
+        case 'truefalse':
+          const selectedTF = questionContainer.querySelector('.true-false-btn.selected-tf');
+          if (!selectedTF) return alert('Please select True or False');
+          questionObj.answer = selectedTF.dataset.value === 'true';
+          break;
+
+        case 'short':
+          const shortAnswer = questionContainer.querySelector('.short-answer-input').value.trim();
+          if (!shortAnswer) return alert('Please provide the expected answer');
+          questionObj.answer = shortAnswer;
+          break;
+      }
+
+      loggedInUser.decks[deckIndex].questions.push(questionObj);
+      updateUserData();
+      displayDecks();
+    }
+
+    function deleteQuestion(deckIndex, questionIndex) {
+      loggedInUser.decks[deckIndex].questions.splice(questionIndex, 1);
+      updateUserData();
+      displayDecks();
+    }
+
+    function updateUserData() {
+      localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+      const allUsers = JSON.parse(localStorage.getItem("approvedUsers")) || [];
+      const updatedUsers = allUsers.map(user => 
+        user.email === loggedInUser.email ? loggedInUser : user
+      );
+      localStorage.setItem("approvedUsers", JSON.stringify(updatedUsers));
+    }
+
+    function displayDecks() {
+      const container = document.getElementById('decks-container');
+      container.innerHTML = '';
+
+      loggedInUser.decks.forEach((deck, deckIndex) => {
+        const deckElement = document.createElement('div');
+        deckElement.className = 'deck';
+        deckElement.innerHTML = `
+          <div class="deck-header">
+            <h3>${deck.name}</h3>
+          </div>
+
+          <div class="question-form" id="question-container-${deckIndex}">
+            <select class="question-type-selector" onchange="updateQuestionType(${deckIndex})">
+              <option value="multiple">Multiple Choice</option>
+              <option value="truefalse">True/False</option>
+              <option value="short">Short Answer</option>
+            </select>
+
+            <input type="text" class="question-input" placeholder="Enter question">
+            
+            <div class="question-options" id="options-${deckIndex}">
+              <!-- Options will be populated based on question type -->
+            </div>
+
+            <button onclick="addQuestion(${deckIndex})" class="btn">Add Question</button>
+          </div>
+
+          <div class="questions">
+            <h4>Questions (${deck.questions.length})</h4>
+            ${deck.questions.map((q, i) => `
+              <div class="question-item">
+                <strong>${q.text}</strong>
+                <div class="question-type">Type: ${getQuestionTypeLabel(q.type)}</div>
+                ${displayQuestionAnswer(q)}
+                <button onclick="deleteQuestion(${deckIndex}, ${i})" class="btn delete-btn">Delete</button>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(deckElement);
+        updateQuestionType(deckIndex);
+      });
+    }
+
+    function getQuestionTypeLabel(type) {
+      return {
+        multiple: 'Multiple Choice',
+        truefalse: 'True/False',
+        short: 'Short Answer'
+      }[type];
+    }
+
+    function displayQuestionAnswer(question) {
+      switch(question.type) {
+        case 'multiple':
+          return `
+            <div class="options">
+              ${question.options.map(opt => `
+                <div class="option ${opt === question.answer ? 'correct-answer' : ''}">
+                  ${opt}
+                </div>
+              `).join('')}
+            </div>`;
+        
+        case 'truefalse':
+          return `<div class="tf-answer">Correct answer: ${question.answer ? 'True' : 'False'}</div>`;
+        
+        case 'short':
+          return `<div class="short-answer">Expected answer: ${question.answer}</div>`;
+      }
+    }
+
+    function updateQuestionType(deckIndex) {
+      const container = document.getElementById(`options-${deckIndex}`);
+      const type = document.querySelector(`#question-container-${deckIndex} .question-type-selector`).value;
+
+      let html = '';
+      switch(type) {
+        case 'multiple':
+          html = `
+            <div class="option-input">
+              <input type="radio" name="correct-${deckIndex}">
+              <input type="text" placeholder="Option 1">
+              <button onclick="addOption(this)">+</button>
+            </div>
+            <div class="option-input">
+              <input type="radio" name="correct-${deckIndex}">
+              <input type="text" placeholder="Option 2">
+              <button onclick="addOption(this)">+</button>
+            </div>`;
+          break;
+
+        case 'truefalse':
+          html = `
+            <div class="true-false-buttons">
+              <button class="true-false-btn true-btn" data-value="true" onclick="selectTF(this)">True</button>
+              <button class="true-false-btn false-btn" data-value="false" onclick="selectTF(this)">False</button>
+            </div>`;
+          break;
+
+        case 'short':
+          html = `<input type="text" class="short-answer-input" placeholder="Expected answer">`;
+          break;
+      }
+
+      container.innerHTML = html;
+    }
+
+    // Helper functions for dynamic inputs
+    function addOption(button) {
+      const optionInput = button.closest('.option-input').cloneNode(true);
+      optionInput.querySelector('input[type="text"]').value = '';
+      button.closest('.question-options').appendChild(optionInput);
+    }
+
+    function selectTF(button) {
+      document.querySelectorAll('.true-false-btn').forEach(btn => btn.classList.remove('selected-tf'));
+      button.classList.add('selected-tf');
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>
